@@ -1,14 +1,23 @@
+import { useEffect, useState } from "react";
 import { Col, ListGroup, Row, Image, Card, Button } from "react-bootstrap";
 import { Link, withRouter } from "react-router-dom";
+import axios from "axios";
+
 import Rating from "../components/Rating";
-import db from "../db/products";
 import { HOME } from "../routes/routes";
 
 const ProductPage = ({ match }) => {
-  console.log(db[0]._id);
-  const product = db.find((p) => p._id === match.params.id);
+  const [product, setProduct] = useState([]);
 
-  console.log(match);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data } = await axios.get(`/api/products/${match.params.id}`);
+
+      setProduct(data);
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <>
