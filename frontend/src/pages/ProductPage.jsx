@@ -1,16 +1,26 @@
 import { useEffect, useState } from "react";
-import { Col, ListGroup, Row, Image, Card, Button } from "react-bootstrap";
+import {
+  Col,
+  ListGroup,
+  Row,
+  Image,
+  Card,
+  Button,
+  Form,
+} from "react-bootstrap";
 import { Link, withRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { listProductDetials } from "../redux/actions/productActions";
-import { HOME } from "../routes/routes";
+import { CART, HOME } from "../routes/routes";
 
 import Rating from "../components/Rating";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 
-const ProductPage = ({ match }) => {
+const ProductPage = ({ match, history }) => {
+  const [qty, setQty] = useState(1);
+
   const dispatch = useDispatch();
 
   const productDetails = useSelector((state) => state.productDetails);
@@ -19,6 +29,10 @@ const ProductPage = ({ match }) => {
   useEffect(() => {
     dispatch(listProductDetials(match.params.id));
   }, [dispatch, match]);
+
+  const addToCartHendler = () => {
+    history.push(`${CART}/${match.params.id}?qty=${qty}`);
+  };
 
   return (
     <>
@@ -71,8 +85,37 @@ const ProductPage = ({ match }) => {
                     </Col>
                   </Row>
                 </ListGroup.Item>
+                {product.countInStock > 0 && (
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Vnt. </Col>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          value={qty}
+                          onChange={(e) => {
+                            setQty(e.target.value);
+                          }}
+                        >
+                          {[...Array(product.countInStock).keys()].map(
+                            (item) => (
+                              <option key={item + 1} value={item + 1}>
+                                {item + 1}
+                              </option>
+                            )
+                          )}
+                        </Form.Control>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                )}
                 <ListGroup.Item>
-                  <Button className="btn-block" variant="light" type="button">
+                  <Button
+                    onClick={addToCartHendler}
+                    className="btn-block"
+                    variant="light"
+                    type="button"
+                  >
                     Į krėpšelį
                   </Button>
                 </ListGroup.Item>
