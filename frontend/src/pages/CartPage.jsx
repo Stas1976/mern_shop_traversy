@@ -15,6 +15,7 @@ import Message from "../components/Message";
 import { addToCart, removeFromCart } from "../redux/actions/cartActions";
 
 const CartPage = ({ match, location, history }) => {
+  console.log("Match ", match);
   const productId = match.params.id;
   const qty = location.search ? Number(location.search.split("=")[1]) : 1;
 
@@ -118,4 +119,4 @@ const CartPage = ({ match, location, history }) => {
   );
 };
 
-export default withRouter(CartPage);
+export default CartPage;

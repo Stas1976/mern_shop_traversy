@@ -19,9 +19,7 @@ function App() {
           <Route path={`${PRODUCT}/:id`}>
             <ProductPage />
           </Route>
-          <Route path={`${CART}/:id?`}>
-            <CartPage />
-          </Route>
+          <Route path={`${CART}/:id?`} component={CartPage}></Route>
         </Container>
       </main>
       <Footer />
