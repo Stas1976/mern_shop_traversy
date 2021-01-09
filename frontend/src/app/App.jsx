@@ -5,7 +5,8 @@ import Header from "../components/Header";
 import CartPage from "../pages/CartPage";
 import Home from "../pages/Home";
 import ProductPage from "../pages/ProductPage";
-import { CART, HOME, PRODUCT } from "../routes/routes";
+import UserPage from "../pages/UserPage";
+import { CART, HOME, LOG_IN, PRODUCT } from "../routes/routes";
 
 function App() {
   return (
@@ -13,13 +14,10 @@ function App() {
       <Header />
       <main>
         <Container>
-          <Route path={HOME} exact>
-            <Home />
-          </Route>
-          <Route path={`${PRODUCT}/:id`}>
-            <ProductPage />
-          </Route>
-          <Route path={`${CART}/:id?`} component={CartPage}></Route>
+          <Route path={`${LOG_IN}`} component={UserPage} />
+          <Route path={`${PRODUCT}/:id`} component={ProductPage} />
+          <Route path={`${CART}/:id?`} component={CartPage} />
+          <Route path={HOME} exact component={Home} />
         </Container>
       </main>
       <Footer />
