@@ -5,17 +5,19 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import FormContainer from "../components/FormContainer";
-import { login } from "../redux/actions/userAction";
-import { REGISTER } from "../routes/routes";
+import { register } from "../redux/actions/userAction";
 
-const UserPage = ({ location, history }) => {
+const RegisterScreen = ({ location, history }) => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState(null);
 
   const dispatch = useDispatch();
 
-  const userLogin = useSelector((state) => state.userLogin);
-  const { loading, error, userInfo } = userLogin;
+  const userRegister = useSelector((state) => state.userRegister);
+  const { loading, error, userInfo } = userRegister;
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
@@ -27,20 +29,35 @@ const UserPage = ({ location, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
+    if (password !== confirmPassword) {
+      setMessage("Slaptažodis nesutampa");
+    } else {
+      dispatch(register(name, email, password));
+    }
   };
 
   return (
     <FormContainer>
-      <h1>Prisijungti</h1>
+      <h1>Registruotis</h1>
+      {message && <Message variant="danger">{message}</Message>}
       {error && <Message variant="danger">{error}</Message>}
       {loading && <Loader />}
       <Form onSubmit={submitHandler}>
+        <Form.Group controlId="name">
+          <Form.Label>Vardas</Form.Label>
+          <Form.Control
+            type="name"
+            placeholder="Enter name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
         <Form.Group controlId="email">
           <Form.Label>El. paštas</Form.Label>
           <Form.Control
             type="email"
-            placeholder="el.paštas"
+            placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           ></Form.Control>
@@ -50,24 +67,32 @@ const UserPage = ({ location, history }) => {
           <Form.Label>Slaptažodis</Form.Label>
           <Form.Control
             type="password"
-            placeholder="slaptažodis"
+            placeholder="Enter password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
 
+        <Form.Group controlId="confirmPassword">
+          <Form.Label>Patvirtinti slaptažodį</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Confirm password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
         <Button type="submit" variant="primary">
-          Prisijungti
+          Registruotis
         </Button>
       </Form>
 
       <Row className="py-3">
         <Col>
-          Neturite paskyros?{" "}
-          <Link
-            to={redirect ? `${REGISTER}?redirect=${redirect}` : "/register"}
-          >
-            Registruotis
+          Jau turitė paskyrą?{" "}
+          <Link to={redirect ? `/login?redirect=${redirect}` : "/login"}>
+            Prisijungti
           </Link>
         </Col>
       </Row>
@@ -75,4 +100,4 @@ const UserPage = ({ location, history }) => {
   );
 };
 
-export default UserPage;
+export default RegisterScreen;
