@@ -4,3 +4,6 @@ export const PRODUCT = "/product/";
 export const CART = "/cart";
 export const PROFILE = "/profile";
 export const REGISTER = "/register";
+export const SHIPPING = "/shipping";
+export const PAYMENT = "/payment";
+export const PLACEORDER = "/placeorder";
